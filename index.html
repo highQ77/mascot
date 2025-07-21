@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MASCOT</title>
+    <!-- 
+        [project tree]
+        |--app.js - your js script (your app)
+        |--index.html - the homepage of website to show how to use the MASCOT program
+        |--logo.png - your app logo
+        |--mascot.js - core tool
+    -->
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #dbdbdb;
+            margin-left: 30px;
+            margin-right: 30px;
+        }
+
+        h1 {
+            font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+            font-size: 48px;
+        }
+
+        h1::after {
+            content: 'v1.0.0';
+            font-size: 14px;
+        }
+
+        button {
+            border: 3px solid #333;
+        }
+
+        button:hover {
+            background-color: yellowgreen;
+            cursor: pointer;
+        }
+
+        pre {
+            border: 1px solid #999;
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <h1>MASCOT</h1>
+        <h4>唯讀字串載體 - by William77 2025-07-20</h4>
+        <h5>
+            此工具軟體的用途為提供網頁前端程式碼保護，如同電玩遊戲的卡帶資料為為唯讀的設計，確保每一位網站使用者擁有一致的體驗。<br>
+            如果產出的 .bmp 圖片色碼經過篡改，則無法正常執行軟體，為了確保本程式為非惡意軟體，程式碼會公開在 github。<br>
+            個人能力有限，可能隱藏未發現的資安問題，若有興趣歡迎一起討論如何改善，謝謝您。<br>
+            <br>
+            🥷下方 app.js 為受保護與儲存於 MASCOT 的軟體<br>
+            🥷step1 為生成 MASCOT 點陣圖像 (.bmp)<br>
+            🥷step2 從 MASCOT 點陣圖像還原軟體並執行<br>
+        </h5>
+        <br>
+        <div>app.js - you can use webpack to geneate production code</div>
+        <div>
+            <pre>
+// app.js - your app software sample
+
+(() => {
+    alert('test');
+    document.writeln('run production code now 🟡')
+})()
+            </pre>
+        </div>
+
+        <div>
+            <button id="genImg" style="margin: 20px 0px;"><b>[STEP1] save MASCOT image</b> ~ click here</button>
+            <pre>
+MASCOT.save('./app.js', {   // store your js app
+    appName: 'MASCOT',      // your app name
+    author: 'William77',    // your name
+    version: 'v1.0.0',      // your software version
+    filename: 'official',   // output file name
+    storeSize: 128,         // 128 x 128 MASCOT image
+    logoPath: './logo.png', // your logo image
+    logoWidth: 100,         // your logo width
+    logoHeight: 100,        // your logo height
+})
+            </pre>
+        </div>
+        <div>
+            <button id="runImg" style="margin: 20px 0px;"><b>[STEP2] select MASCOT image and then run your
+                    app</b> ~ click here</button>
+            <input id="file2run" type="file" style="display: none;" />
+            <pre>
+// 'url' is MASCOT image path or MASCOT base64 image string
+
+MASCOT.recover(url).then(data => MASCOT.run(data)) 
+            </pre>
+        </div>
+    </div>
+    <script src="./mascot.js"></script>
+    <script>
+        let genImg = document.getElementById('genImg')
+        let runImg = document.getElementById('runImg')
+        let file2run = document.getElementById('file2run')
+        // step1 - geneate MASCOT image
+        genImg.onclick = () => MASCOT.save('./app.js', {
+            appName: 'MASCOT', // your app name
+            author: 'William77', // your name
+            version: 'v1.0.0', // your software version
+            filename: 'official', // output file name
+            storeSize: 128, // 128 x 128 MASCOT image
+            logoPath: './logo.png', // your logo image
+            logoWidth: 100, // your logo width
+            logoHeight: 100, // your logo height
+        })
+        // step2 - parse MASCOT image and run your app.js
+        runImg.onclick = () => {
+            file2run.click()
+            file2run.onchange = e => {
+                const f = e.target.files[0]
+                const fr = new FileReader()
+                fr.onload = e => {
+                    let url = e.target.result; // base64 image or image path
+                    MASCOT.recover(url).then(data => MASCOT.run(data))
+                    // MASCOT.recover("mascot-test.bmp").then(data => MASCOT.run(data)) 
+                    file2run.value = null
+                }
+                fr.readAsDataURL(f)
+            }
+        }
+    </script>
+</body>
+
+</html>
