@@ -36,8 +36,9 @@ const MASCOT = {
                 data.unshift(lenStr[i])
             data = data.filter(i => i)
 
-            const dataMinValue = Math.min(...data.map(i => i.charCodeAt(0)))
-            const dataMaxValue = Math.max(...data.map(i => i.charCodeAt(0)))
+            let dMap = data.map(i => i.charCodeAt(0))
+            const dataMinValue = dMap.reduce((min, current) => current < min ? current : min) // min
+            const dataMaxValue = dMap.reduce((min, current) => current > min ? current : min) // max
             const logo = await getLogoImage(logoPath)
 
             const ctx = getNewCanvas(storeSize, storeSize).getContext('2d')
